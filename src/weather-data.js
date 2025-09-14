@@ -87,21 +87,3 @@ export function dailyForcast(location) {
 
 getWeatherData();
 dailyForcast();
-
-//using the data provide from the API, get the first day in the days array.
-//   getDayTemp(0, data);
-
-// function getDayTemp(idx, rawdata) {
-//   var daysLength = rawdata.days.length;
-//   var tempForDay = rawdata.days[idx].temp;
-//   console.log(
-//     `Returning temperature for day passed via function index: ${idx} ${tempForDay}`
-//   );
-//   for (i = 0; i < daysLength; i++) {
-//     var tempForDay2 = rawdata.days[i].temp;
-//     console.log(
-//       `Returning temperature for all days (days total: ${daysLength}) current day: ${i} ${tempForDay2}`
-//     );
-//   }
-//   //return tempForDay;
-// }
