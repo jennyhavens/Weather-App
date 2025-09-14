@@ -1,50 +1,50 @@
-const weatherSearch = document.getElementById("weatherSearch");
+const apiKey = "PXQFNBZNYHV8EHVDGVMEA8SWR";
 
-weatherSearch.addEventListener("submit", (event) => {
-  event.preventDefault();
-  const location = document.getElementById("location").value;
-  getWeatherData(location);
-  dailyForcast(location); // get 5 day forcast
-});
-
-export function getWeatherData(location) {
-  const apiKey = "PXQFNBZNYHV8EHVDGVMEA8SWR";
-  const url = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${location}?key=${apiKey}`;
+export async function fetchWeatherData(location, includeDays = false) {
+  const url = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${location}?key=${apiKey}${
+    includeDays ? "&include=days" : ""
+  }`;
 
   console.clear();
 
-  fetch(url, {
+  const response = await fetch(url, {
     method: "GET",
     headers: {},
-  })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      return response.json();
-    })
-    .then((data) => {
-      const dateTime = data.currentConditions.datetime;
-      const temperature = data.currentConditions.temp;
-      const feelsLike = data.currentConditions.feelslike;
-      const humidity = data.currentConditions.humidity;
-      const precipProb = data.currentConditions.precipprob;
-      const conditions = data.currentConditions.conditions;
-      const condIcon = data.currentConditions.icon;
-      const cloudCoverage = data.currentConditions.cloudcover;
-      const sunRise = data.currentConditions.sunrise;
-      const sunSet = data.currentConditions.sunset;
+  });
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+  return await response.json();
+}
 
-      console.log(`Time: ${dateTime}`);
-      console.log(`Temperature: ${temperature}°F`);
-      console.log(`Feels Like: ${feelsLike}`);
+export function getWeatherData(location) {
+  fetchWeatherData(location)
+    .then((data) => {
+      const {
+        datetime,
+        temp,
+        feelslike,
+        humidity,
+        precipprob,
+        conditions,
+        icon,
+        windspeed,
+        uvindex,
+        sunrise,
+        sunset,
+      } = data.currentConditions;
+
+      console.log(`Time: ${datetime}`);
+      console.log(`Temperature: ${temp}°F`);
+      console.log(`Feels Like: ${feelslike}`);
       console.log(`Humidity: ${humidity}`);
-      console.log(`Chance of Precipitation: ${precipProb}%`);
+      console.log(`Chance of Precipitation: ${precipprob}%`);
       console.log(`${conditions}`);
-      console.log(`${condIcon}`);
-      console.log(`Cloud Coverage: ${cloudCoverage}%`);
-      console.log(`Sunrise: ${sunRise}`);
-      console.log(`Sunset: ${sunSet}`);
+      console.log(`${icon}`);
+      console.log(`Wind Speed: ${windspeed}`);
+      console.log(`UV Index: ${uvindex}`);
+      console.log(`Sunrise: ${sunrise}`);
+      console.log(`Sunset: ${sunset}`);
       console.log("");
     })
     .catch((err) => {
@@ -53,24 +53,10 @@ export function getWeatherData(location) {
 }
 
 export function dailyForcast(location) {
-  const apiKey = "PXQFNBZNYHV8EHVDGVMEA8SWR";
-  const url = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${location}?key=${apiKey}&include=days`;
-
-  console.clear();
-
-  fetch(url, {
-    method: "GET",
-    headers: {},
-  })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      return response.json();
-    })
+  fetchWeatherData(location, true)
     .then((data) => {
       const forecastDays = data.days;
-      const fiveDayForecast = forecastDays.slice(0, 5); //only 5 days
+      const fiveDayForecast = forecastDays.slice(0, 5); // only 5 days
       fiveDayForecast.forEach((day) => {
         console.log(`Date: ${day.datetime}`);
         console.log(`Max Temperature: ${day.tempmax}°F`);
