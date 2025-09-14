@@ -1,3 +1,5 @@
+import { renderWeather } from "./DOMcontrol";
+
 const apiKey = "PXQFNBZNYHV8EHVDGVMEA8SWR";
 
 export async function fetchWeatherData(location, includeDays = false) {
@@ -17,6 +19,41 @@ export async function fetchWeatherData(location, includeDays = false) {
   return await response.json();
 }
 
+// export function getWeatherData(location) {
+//   fetchWeatherData(location)
+//     .then((data) => {
+//       const {
+//         datetime,
+//         temp,
+//         feelslike,
+//         humidity,
+//         precipprob,
+//         conditions,
+//         icon,
+//         windspeed,
+//         uvindex,
+//         sunrise,
+//         sunset,
+//       } = data.currentConditions;
+
+//       console.log(`Time: ${datetime}`);
+//       console.log(`Temperature: ${temp}°F`);
+//       console.log(`Feels Like: ${feelslike}`);
+//       console.log(`Humidity: ${humidity}`);
+//       console.log(`Chance of Precipitation: ${precipprob}%`);
+//       console.log(`${conditions}`);
+//       console.log(`${icon}`);
+//       console.log(`Wind Speed: ${windspeed}`);
+//       console.log(`UV Index: ${uvindex}`);
+//       console.log(`Sunrise: ${sunrise}`);
+//       console.log(`Sunset: ${sunset}`);
+//       console.log("");
+//     })
+//     .catch((err) => {
+//       console.error(err);
+//     });
+// }
+
 export function getWeatherData(location) {
   fetchWeatherData(location)
     .then((data) => {
@@ -34,18 +71,23 @@ export function getWeatherData(location) {
         sunset,
       } = data.currentConditions;
 
-      console.log(`Time: ${datetime}`);
-      console.log(`Temperature: ${temp}°F`);
-      console.log(`Feels Like: ${feelslike}`);
-      console.log(`Humidity: ${humidity}`);
-      console.log(`Chance of Precipitation: ${precipprob}%`);
-      console.log(`${conditions}`);
-      console.log(`${icon}`);
-      console.log(`Wind Speed: ${windspeed}`);
-      console.log(`UV Index: ${uvindex}`);
-      console.log(`Sunrise: ${sunrise}`);
-      console.log(`Sunset: ${sunset}`);
-      console.log("");
+      // Prepare the weather data object to pass to renderWeather
+      const weatherData = {
+        location: location,
+        temp: temp,
+        feelslike: feelslike,
+        humidity: humidity,
+        precipprob: precipprob,
+        conditions: conditions,
+        icon: icon,
+        windspeed: windspeed,
+        uvindex: uvindex,
+        sunrise: sunrise,
+        sunset: sunset,
+      };
+
+      // Call renderWeather to display the data
+      renderWeather(weatherData);
     })
     .catch((err) => {
       console.error(err);
