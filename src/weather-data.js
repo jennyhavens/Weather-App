@@ -19,71 +19,107 @@ export async function fetchWeatherData(location, includeDays = false) {
   return await response.json();
 }
 
-// export function getWeatherData(location) {
-//   fetchWeatherData(location)
-//     .then((data) => {
-//       const {
-//         datetime,
-//         temp,
-//         feelslike,
-//         humidity,
-//         precipprob,
-//         conditions,
-//         icon,
-//         windspeed,
-//         uvindex,
-//         sunrise,
-//         sunset,
-//       } = data.currentConditions;
-
-//       console.log(`Time: ${datetime}`);
-//       console.log(`Temperature: ${temp}°F`);
-//       console.log(`Feels Like: ${feelslike}`);
-//       console.log(`Humidity: ${humidity}`);
-//       console.log(`Chance of Precipitation: ${precipprob}%`);
-//       console.log(`${conditions}`);
-//       console.log(`${icon}`);
-//       console.log(`Wind Speed: ${windspeed}`);
-//       console.log(`UV Index: ${uvindex}`);
-//       console.log(`Sunrise: ${sunrise}`);
-//       console.log(`Sunset: ${sunset}`);
-//       console.log("");
-//     })
-//     .catch((err) => {
-//       console.error(err);
-//     });
-// }
-
 export function getWeatherData(location) {
   fetchWeatherData(location)
     .then((data) => {
       const {
-        datetime,
-        temp,
-        feelslike,
-        humidity,
-        precipprob,
-        conditions,
-        icon,
-        windspeed,
-        uvindex,
-        sunrise,
-        sunset,
-      } = data.currentConditions;
+        resolvedAddress,
+        currentConditions: {
+          datetime,
+          temp,
+          feelslike,
+          humidity,
+          precipprob,
+          conditions,
+          windspeed,
+          sunrise,
+          sunset,
+        },
+        days,
+      } = data;
+
+      // Deconstruct days array to get needed info for 5 day forecast
+      const deconstructedDays = days.map(
+        ({ datetime, tempmax, tempmin, conditions, precip }) => ({
+          formattedDate: formatDate(datetime),
+          tempmax: Math.round(tempmax),
+          tempmin: Math.round(tempmin),
+          conditions,
+          precip: Math.round(precip),
+        })
+      );
+
+      function formatDateTimeFromString(datetime) {
+        let hours = 0,
+          minutes = 0,
+          seconds = 0;
+        let now = new Date();
+
+        if (datetime.includes("T")) {
+          const [, timePart] = datetime.split("T");
+          [hours, minutes, seconds] = timePart.split(":").map(Number);
+        } else {
+          [hours, minutes, seconds] = datetime.split(":").map(Number);
+        }
+
+        const dateTime = new Date(
+          now.getFullYear(),
+          now.getMonth(),
+          now.getDate(),
+          hours,
+          minutes,
+          seconds || 0
+        );
+
+        const options = {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: true,
+        };
+
+        return new Intl.DateTimeFormat("en-US", options).format(dateTime);
+      }
+
+      function formatDate(dateString) {
+        const date = new Date(dateString);
+        date.setDate(date.getDate() + 1);
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const day = String(date.getDate()).padStart(2, "0");
+
+        return `${month}/${day}`;
+      }
+
+      function formattedTime(timeString) {
+        const [hours, minutes, seconds] = timeString.split(":");
+        const date = new Date();
+        date.setHours(hours);
+        date.setMinutes(minutes);
+        date.setSeconds(seconds);
+
+        const options = {
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: true,
+        };
+        return new Intl.DateTimeFormat("en-US", options).format(date);
+      }
 
       // Prepare the weather data object to pass to renderWeather
       const weatherData = {
-        location: location,
-        temp: temp,
-        feelslike: feelslike,
-        humidity: humidity,
-        precipprob: precipprob,
+        location: resolvedAddress,
+        lastUpdated: formatDateTimeFromString(datetime),
+        temp: Math.round(temp),
+        feelslike: Math.round(feelslike),
+        humidity: Math.round(humidity),
+        precipprob: Math.round(precipprob),
         conditions: conditions,
-        icon: icon,
-        windspeed: windspeed,
-        uvindex: uvindex,
-        sunrise: sunrise,
-        sunset: sunset,
+        windspeed: Math.round(windspeed),
+        sunrise: formattedTime(sunrise),
+        sunset: formattedTime(sunset),
+        days: deconstructedDays, // array of days with datetime, tempmax, tempmin
       };
 
       // Call renderWeather to display the data
@@ -94,24 +130,4 @@ export function getWeatherData(location) {
     });
 }
 
-export function dailyForcast(location) {
-  fetchWeatherData(location, true)
-    .then((data) => {
-      const forecastDays = data.days;
-      const fiveDayForecast = forecastDays.slice(0, 5); // only 5 days
-      fiveDayForecast.forEach((day) => {
-        console.log(`Date: ${day.datetime}`);
-        console.log(`Max Temperature: ${day.tempmax}°F`);
-        console.log(`Min Temperature: ${day.tempmin}°F`);
-        console.log(`Conditions: ${day.conditions}`);
-        console.log(`Precipitation: ${day.precip}`);
-        console.log("");
-      });
-    })
-    .catch((err) => {
-      console.error(err);
-    });
-}
-
 getWeatherData();
-dailyForcast();
