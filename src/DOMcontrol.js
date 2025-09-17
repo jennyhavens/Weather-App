@@ -1,6 +1,9 @@
 import { getWeatherData } from "./weather-data";
 import sunny from "./assets/sunny.svg";
 
+let originalWeatherData = {};
+let currentUnit = "F";
+
 export function DOMcontrol() {
   const mainContainer = document.querySelector(".main-container");
   const headerContainer = document.querySelector(".header-container");
@@ -22,7 +25,6 @@ export function DOMcontrol() {
 
   const weatherContainer = document.createElement("div");
   weatherContainer.classList.add("weather-container");
-  weatherContainer.textContent = "weather goes here";
 
   headerContainer.appendChild(headerTitle);
 
@@ -39,11 +41,41 @@ export function DOMcontrol() {
     const location = document.getElementById("location").value;
     getWeatherData(location);
   });
+
+  fahrenheitBtn.addEventListener("click", () => {
+    currentUnit = "F"; // Update the current unit
+    renderWeather(originalWeatherData);
+  });
+
+  celsiusBtn.addEventListener("click", () => {
+    currentUnit = "C"; // Update the current unit
+    renderWeather(originalWeatherData);
+  });
 }
 
 export function renderWeather(weatherData) {
   const weatherContainer = document.querySelector(".weather-container");
   weatherContainer.innerHTML = "";
+
+  // Store original weather data for conversion
+  originalWeatherData = weatherData;
+
+  const temperature =
+    currentUnit === "C" ? ((weatherData.temp - 32) * 5) / 9 : weatherData.temp;
+  const feelsLike =
+    currentUnit === "C"
+      ? ((weatherData.feelslike - 32) * 5) / 9
+      : weatherData.feelslike;
+
+  const tempInfo = document.createElement("p");
+  tempInfo.classList.add("temp-info");
+  tempInfo.textContent = `${temperature.toFixed(1)}°${currentUnit}`;
+
+  const feelsLikeInfo = document.createElement("p");
+  feelsLikeInfo.classList.add("feels-like");
+  feelsLikeInfo.textContent = `Feels Like: ${feelsLike.toFixed(
+    1
+  )}°${currentUnit}`;
 
   const locationContainer = document.createElement("div");
   locationContainer.classList.add("location-container");
@@ -58,14 +90,6 @@ export function renderWeather(weatherData) {
 
   const conditionsContainer = document.createElement("div");
   conditionsContainer.classList.add("conditions-container");
-
-  const tempInfo = document.createElement("p");
-  tempInfo.classList.add("temp-info");
-  tempInfo.textContent = `${weatherData.temp}°F`;
-
-  const feelsLike = document.createElement("p");
-  feelsLike.classList.add("feels-like");
-  feelsLike.textContent = `Feels Like: ${weatherData.feelslike}°F`;
 
   const conditionIcon = document.createElement("img");
   conditionIcon.setAttribute("width", "130px");
@@ -106,11 +130,11 @@ export function renderWeather(weatherData) {
 
   const highTemp = document.createElement("p");
   highTemp.classList.add("high-temp");
-  highTemp.textContent = `High: ${weatherData.days[0].tempmax}°F`;
+  highTemp.textContent = `High: ${temperature.toFixed(1)}°${currentUnit}`;
 
   const lowTemp = document.createElement("p");
   lowTemp.classList.add("low-temp");
-  lowTemp.textContent = `Low: ${weatherData.days[0].tempmin}°F`;
+  lowTemp.textContent = `Low: ${temperature.toFixed(1)}°${currentUnit}`;
 
   highLowContainer.appendChild(highTemp);
   highLowContainer.appendChild(lowTemp);
@@ -123,7 +147,7 @@ export function renderWeather(weatherData) {
   moreDetailsContainer.appendChild(chanceOfPrecip);
 
   conditionsContainer.appendChild(tempInfo);
-  conditionsContainer.appendChild(feelsLike);
+  conditionsContainer.appendChild(feelsLikeInfo);
   conditionsContainer.appendChild(conditionIcon);
   conditionsContainer.appendChild(conditionInfo);
 
@@ -141,17 +165,21 @@ export function renderWeather(weatherData) {
     const dayContainer = document.createElement("div");
     dayContainer.classList.add("day-container");
 
-    const dayName = document.createElement("p");
-    dayName.classList.add("day-name");
-    dayName.textContent = day.formattedDate;
+    const dayOfWeek = document.createElement("p");
+    dayOfWeek.classList.add("day-of-week");
+    dayOfWeek.textContent = day.dayOfWeek;
+
+    const dateOfDay = document.createElement("p");
+    dateOfDay.classList.add("day-name");
+    dateOfDay.textContent = day.formattedDate;
 
     const dayTempMax = document.createElement("p");
     dayTempMax.classList.add("day-temp-max");
-    dayTempMax.textContent = `High: ${day.tempmax}°F`;
+    dayTempMax.textContent = `High: ${temperature.toFixed(1)}°${currentUnit}`;
 
     const dayTempMin = document.createElement("p");
     dayTempMin.classList.add("day-temp-min");
-    dayTempMin.textContent = `Low: ${day.tempmin}°F`;
+    dayTempMin.textContent = `Low:${temperature.toFixed(1)}°${currentUnit}`;
 
     const dayConditions = document.createElement("p");
     dayConditions.classList.add("day-conditions");
@@ -161,7 +189,8 @@ export function renderWeather(weatherData) {
     dayPrecip.classList.add("day-precip");
     dayPrecip.textContent = `Precipitation: ${day.precip}%`;
 
-    dayContainer.appendChild(dayName);
+    dayContainer.appendChild(dayOfWeek);
+    dayContainer.appendChild(dateOfDay);
     dayContainer.appendChild(dayTempMax);
     dayContainer.appendChild(dayTempMin);
     dayContainer.appendChild(dayConditions);

@@ -3,7 +3,7 @@ import { renderWeather } from "./DOMcontrol";
 const apiKey = "PXQFNBZNYHV8EHVDGVMEA8SWR";
 
 export async function fetchWeatherData(location, includeDays = false) {
-  const url = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${location}?key=${apiKey}${
+  const url = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${location}?&key=${apiKey}${
     includeDays ? "&include=days" : ""
   }`;
 
@@ -41,6 +41,7 @@ export function getWeatherData(location) {
       // Deconstruct days array to get needed info for 5 day forecast
       const deconstructedDays = days.map(
         ({ datetime, tempmax, tempmin, conditions, precip }) => ({
+          dayOfWeek: getDaysOfWeek(datetime),
           formattedDate: formatDate(datetime),
           tempmax: Math.round(tempmax),
           tempmin: Math.round(tempmin),
@@ -49,6 +50,7 @@ export function getWeatherData(location) {
         })
       );
 
+      // Helper functions for formatting date and time
       function formatDateTimeFromString(datetime) {
         let hours = 0,
           minutes = 0,
@@ -105,6 +107,15 @@ export function getWeatherData(location) {
           hour12: true,
         };
         return new Intl.DateTimeFormat("en-US", options).format(date);
+      }
+
+      function getDaysOfWeek(dateString) {
+        const date = new Date(dateString);
+        date.setDate(date.getDate() + 1);
+        const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+        const dayOfWeek = date.getDay();
+
+        return daysOfWeek[dayOfWeek];
       }
 
       // Prepare the weather data object to pass to renderWeather
