@@ -88,10 +88,25 @@ export function getWeatherData(location) {
       function formatDate(dateString) {
         const date = new Date(dateString);
         date.setDate(date.getDate() + 1);
-        const month = String(date.getMonth() + 1).padStart(2, "0");
-        const day = String(date.getDate()).padStart(2, "0");
 
-        return `${month}/${day}`;
+        const monthNames = [
+          "Jan",
+          "Feb",
+          "Mar",
+          "Apr",
+          "May",
+          "Jun",
+          "Jul",
+          "Aug",
+          "Sept",
+          "Oct",
+          "Nov",
+          "Dec",
+        ];
+        const month = monthNames[date.getMonth()];
+        const day = date.getDate();
+
+        return `${month} ${day}`;
       }
 
       function formattedTime(timeString) {
@@ -127,7 +142,7 @@ export function getWeatherData(location) {
         humidity: Math.round(humidity),
         precipprob: Math.round(precipprob),
         conditions: conditions,
-        windspeed: Math.round(windspeed),
+        windspeed: windspeed,
         sunrise: formattedTime(sunrise),
         sunset: formattedTime(sunset),
         days: deconstructedDays, // array of days with datetime, tempmax, tempmin

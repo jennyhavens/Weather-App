@@ -2,10 +2,11 @@ html,
 body {
   margin: 0;
   height: 100%;
+  background-color: rgb(84, 154, 214);
 }
 
-body {
-  background-color: rgb(160, 211, 227);
+.header-container {
+  background-color: rgb(60, 149, 232);
 }
 
 .header-title {
@@ -18,6 +19,149 @@ body {
   font-size: 3rem;
 }
 
+.weather-search {
+  background-color: rgb(96, 96, 241);
+  display: flex;
+  justify-content: center;
+}
+
+.degrees-container {
+  background-color: rgb(120, 192, 243);
+  display: flex;
+  justify-content: center;
+}
+
 .weather-container {
-  background-color: aliceblue;
+  display: grid;
+  grid-template-rows: auto auto auto;
+  background-color: rgb(63, 199, 214);
+  width: 50%;
+  margin: 20px auto;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.current-weather-container {
+  background-color: white;
+}
+
+.location-container {
+  display: grid;
+  grid-template-rows: auto auto;
+  justify-items: center;
+}
+
+.location-name {
+  font-size: 2rem;
+  padding-top: 10px;
+  margin: 0;
+}
+
+.conditions-container {
+  background-color: transparent;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: 2fr, 1fr;
+  justify-items: center;
+  align-items: center;
+}
+
+.temp-info {
+  grid-row: 1;
+  grid-column: 1;
+}
+
+.current-temp {
+  font-size: 3.5rem;
+  font-weight: bold;
+  margin-bottom: 0;
+}
+
+.conditions-icon {
+  grid-row: 1;
+  grid-column: 2;
+}
+
+.condition-info {
+  grid-row: 2;
+  grid-column: 2;
+}
+
+.more-details-container {
+  background-color: rgb(187, 229, 218);
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  grid-template-rows: repeat(2, auto);
+  justify-items: center;
+  padding: 8px;
+  margin: 10px;
+}
+
+.more-details-container p {
+  margin: 2px;
+}
+
+.humidity-title {
+  grid-column: 1;
+  grid-row: 1;
+  font-weight: bold;
+}
+
+.wind-title {
+  grid-column: 2;
+  grid-row: 1;
+  font-weight: bold;
+}
+
+.precip-title {
+  grid-column: 3;
+  grid-row: 1;
+  font-weight: bold;
+}
+
+.sun-and-high-low-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin: 10px;
+  gap: 10px;
+}
+
+.sun-container {
+  background-color: pink;
+}
+
+.high-low-container {
+  background-color: lightgreen;
+}
+
+.forecast-container {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+  max-width: 100%;
+  overflow-x: auto;
+  min-width: 100px;
+}
+
+.day-container {
+  display: grid;
+  grid-template-rows: repeat(7, auto);
+  justify-items: center;
+  text-align: center;
+  background-color: rgb(255, 255, 174);
+  padding: 10px;
+  grid-row: auto;
+}
+
+.day-container p {
+  margin: 2px;
+}
+
+.day-of-week {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.day-name {
+  font-size: 0.9rem;
 }
