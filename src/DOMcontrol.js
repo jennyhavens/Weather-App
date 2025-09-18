@@ -12,16 +12,39 @@ export function DOMcontrol() {
   headerTitle.textContent = "Weather App";
   headerTitle.classList.add("header-title");
 
+  const weatherSearch = document.getElementById("weatherSearch");
+
+  weatherSearch.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const location = document.getElementById("location").value;
+    getWeatherData(location);
+  });
+
   const degreesContainer = document.createElement("div");
   degreesContainer.classList.add("degrees-container");
 
   const fahrenheitBtn = document.createElement("button");
   fahrenheitBtn.textContent = "F°";
   fahrenheitBtn.classList.add("fahrenheit-button");
+  fahrenheitBtn.classList.add("active-unit");
 
   const celsiusBtn = document.createElement("button");
   celsiusBtn.textContent = "C°";
   celsiusBtn.classList.add("celsius-button");
+
+  fahrenheitBtn.addEventListener("click", () => {
+    currentUnit = "F"; // Update the current unit
+    fahrenheitBtn.classList.add("active-unit");
+    celsiusBtn.classList.remove("active-unit");
+    renderWeather(originalWeatherData);
+  });
+
+  celsiusBtn.addEventListener("click", () => {
+    currentUnit = "C"; // Update the current unit
+    celsiusBtn.classList.add("active-unit");
+    fahrenheitBtn.classList.remove("active-unit");
+    renderWeather(originalWeatherData);
+  });
 
   const weatherContainer = document.createElement("div");
   weatherContainer.classList.add("weather-container");
@@ -33,24 +56,6 @@ export function DOMcontrol() {
 
   mainContainer.appendChild(degreesContainer);
   mainContainer.appendChild(weatherContainer);
-
-  const weatherSearch = document.getElementById("weatherSearch");
-
-  weatherSearch.addEventListener("submit", (event) => {
-    event.preventDefault();
-    const location = document.getElementById("location").value;
-    getWeatherData(location);
-  });
-
-  fahrenheitBtn.addEventListener("click", () => {
-    currentUnit = "F"; // Update the current unit
-    renderWeather(originalWeatherData);
-  });
-
-  celsiusBtn.addEventListener("click", () => {
-    currentUnit = "C"; // Update the current unit
-    renderWeather(originalWeatherData);
-  });
 }
 
 export function renderWeather(weatherData) {
@@ -227,13 +232,13 @@ export function renderWeather(weatherData) {
 
     const dayTempMax = document.createElement("p");
     dayTempMax.classList.add("day-temp-max");
-    dayTempMax.textContent = `High: ${convertTemperature(day.tempmax).toFixed(
+    dayTempMax.textContent = `${convertTemperature(day.tempmax).toFixed(
       0
     )}°${currentUnit}`;
 
     const dayTempMin = document.createElement("p");
     dayTempMin.classList.add("day-temp-min");
-    dayTempMin.textContent = `Low: ${convertTemperature(day.tempmin).toFixed(
+    dayTempMin.textContent = `${convertTemperature(day.tempmin).toFixed(
       0
     )}°${currentUnit}`;
 
@@ -247,9 +252,9 @@ export function renderWeather(weatherData) {
 
     dayContainer.appendChild(dayOfWeek);
     dayContainer.appendChild(dateOfDay);
-    dayContainer.appendChild(dayConditionIcon);
     dayContainer.appendChild(dayTempMax);
     dayContainer.appendChild(dayTempMin);
+    dayContainer.appendChild(dayConditionIcon);
     dayContainer.appendChild(dayConditions);
     dayContainer.appendChild(dayPrecip);
 

@@ -7,8 +7,6 @@ export async function fetchWeatherData(location, includeDays = false) {
     includeDays ? "&include=days" : ""
   }`;
 
-  console.clear();
-
   const response = await fetch(url, {
     method: "GET",
     headers: {},
@@ -37,6 +35,19 @@ export function getWeatherData(location) {
         },
         days,
       } = data;
+
+      if (
+        location &&
+        resolvedAddress &&
+        resolvedAddress.toLowerCase() === location.toLowerCase()
+      ) {
+        const validationDiv = document.getElementById("validation-message");
+        if (validationDiv) {
+          validationDiv.textContent =
+            "Please enter a more specific location (e.g., 'City, State' or 'City, Country').";
+        }
+        return;
+      }
 
       // Deconstruct days array to get needed info for 5 day forecast
       const deconstructedDays = days.map(
@@ -148,6 +159,9 @@ export function getWeatherData(location) {
         days: deconstructedDays, // array of days with datetime, tempmax, tempmin
       };
 
+      const validationDiv = document.getElementById("validation-message");
+      if (validationDiv) validationDiv.textContent = "";
+
       // Call renderWeather to display the data
       renderWeather(weatherData);
     })
@@ -156,4 +170,4 @@ export function getWeatherData(location) {
     });
 }
 
-getWeatherData();
+getWeatherData("Boston, MA");
