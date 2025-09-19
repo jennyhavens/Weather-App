@@ -20,6 +20,8 @@ export async function fetchWeatherData(location, includeDays = false) {
 export function getWeatherData(location) {
   fetchWeatherData(location)
     .then((data) => {
+      console.log("Fetched Weather Data:", data);
+
       const {
         resolvedAddress,
         currentConditions: {
@@ -32,6 +34,7 @@ export function getWeatherData(location) {
           windspeed,
           sunrise,
           sunset,
+          icon,
         },
         days,
       } = data;
@@ -51,13 +54,14 @@ export function getWeatherData(location) {
 
       // Deconstruct days array to get needed info for 5 day forecast
       const deconstructedDays = days.map(
-        ({ datetime, tempmax, tempmin, conditions, precip }) => ({
+        ({ datetime, tempmax, tempmin, conditions, precip, icon }) => ({
           dayOfWeek: getDaysOfWeek(datetime),
           formattedDate: formatDate(datetime),
           tempmax: Math.round(tempmax),
           tempmin: Math.round(tempmin),
           conditions,
           precip: Math.round(precip),
+          icon,
         })
       );
 
@@ -156,6 +160,7 @@ export function getWeatherData(location) {
         windspeed: windspeed,
         sunrise: formattedTime(sunrise),
         sunset: formattedTime(sunset),
+        icon: icon,
         days: deconstructedDays, // array of days with datetime, tempmax, tempmin
       };
 

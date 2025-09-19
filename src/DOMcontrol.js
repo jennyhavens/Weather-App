@@ -1,5 +1,38 @@
 import { getWeatherData } from "./weather-data";
-import sunny from "./assets/sunny.svg";
+
+const icons = require.context("./assets", false, /\.svg$/);
+
+function getIconSrc(iconName) {
+  // Map API icon names to your SVG filenames
+  const iconMap = {
+    "clear-day": "clear-day.svg",
+    "clear-night": "clear-night.svg",
+    cloudy: "cloudy.svg",
+    fog: "fog.svg",
+    hail: "hail.svg",
+    "partly-cloudy-day": "partly-cloudy-day.svg",
+    "partly-cloudy-night": "partly-cloudy-night.svg",
+    "rain-snow-showers-day": "rain-snow-showers-day.svg",
+    "rain-snow-showers-night": "rain-snow-showers-night.svg",
+    "rain-snow": "rain-snow.svg",
+    rain: "rain.svg",
+    "showers-day": "showers-day.svg",
+    "showers-night": "showers-night.svg",
+    sleet: "sleet.svg",
+    "snow-showers-day": "snow-showers-day.svg",
+    "snow-showers-night": "snow-showers-night.svg",
+    snow: "snow.svg",
+    "thunder-rain": "thunder-rain.svg",
+    "thunder-showers-day": "thunder-showers-day.svg",
+    "thunder-showers-night": "thunder-showers-night.svg",
+    thunder: "thunder.svg",
+    wind: "wind.svg",
+
+    // ...add more mappings as needed
+  };
+  const fileName = iconMap[iconName] || "sunny.svg";
+  return icons(`./${fileName}`);
+}
 
 let originalWeatherData = {};
 let currentUnit = "F";
@@ -103,7 +136,7 @@ export function renderWeather(weatherData) {
 
   const conditionIcon = document.createElement("img");
   conditionIcon.setAttribute("width", "130px");
-  conditionIcon.src = sunny;
+  conditionIcon.src = getIconSrc(weatherData.icon);
 
   const conditionInfo = document.createElement("p");
   conditionInfo.classList.add("condition-info");
@@ -228,7 +261,7 @@ export function renderWeather(weatherData) {
 
     const dayConditionIcon = document.createElement("img");
     dayConditionIcon.setAttribute("width", "40px");
-    dayConditionIcon.src = sunny;
+    dayConditionIcon.src = getIconSrc(day.icon);
 
     const dayTempMax = document.createElement("p");
     dayTempMax.classList.add("day-temp-max");
