@@ -3,7 +3,6 @@ import { getWeatherData } from "./weather-data";
 const icons = require.context("./assets", false, /\.svg$/);
 
 function getIconSrc(iconName) {
-  // Map API icon names to your SVG filenames
   const iconMap = {
     "clear-day": "clear-day.svg",
     "clear-night": "clear-night.svg",
@@ -27,8 +26,10 @@ function getIconSrc(iconName) {
     "thunder-showers-night": "thunder-showers-night.svg",
     thunder: "thunder.svg",
     wind: "wind.svg",
-
-    // ...add more mappings as needed
+    "arrow-down-bold": "arrow-down-bold.svg",
+    "arrow-up-bold": "arrow-up-bold.svg",
+    "moon-waxing-crescent": "moon-waxing-crescent.svg",
+    water: "water.svg",
   };
   const fileName = iconMap[iconName] || "sunny.svg";
   return icons(`./${fileName}`);
@@ -66,14 +67,14 @@ export function DOMcontrol() {
   celsiusBtn.classList.add("celsius-button");
 
   fahrenheitBtn.addEventListener("click", () => {
-    currentUnit = "F"; // Update the current unit
+    currentUnit = "F";
     fahrenheitBtn.classList.add("active-unit");
     celsiusBtn.classList.remove("active-unit");
     renderWeather(originalWeatherData);
   });
 
   celsiusBtn.addEventListener("click", () => {
-    currentUnit = "C"; // Update the current unit
+    currentUnit = "C";
     celsiusBtn.classList.add("active-unit");
     fahrenheitBtn.classList.remove("active-unit");
     renderWeather(originalWeatherData);
@@ -95,10 +96,10 @@ export function renderWeather(weatherData) {
   const weatherContainer = document.querySelector(".weather-container");
   weatherContainer.innerHTML = "";
 
+  //Render current weather
   const currentWeatherContainer = document.createElement("div");
   currentWeatherContainer.classList.add("current-weather-container");
 
-  // Store original weather data for conversion
   originalWeatherData = weatherData;
 
   function convertTemperature(value) {
@@ -181,33 +182,64 @@ export function renderWeather(weatherData) {
 
   const sunRise = document.createElement("p");
   sunRise.classList.add("sunrise");
-  sunRise.textContent = `Icon: ${weatherData.sunrise}`;
+
+  const sunRiseIcon = document.createElement("img");
+  sunRiseIcon.classList.add("sunrise-icon");
+  sunRiseIcon.src = getIconSrc("sunny");
 
   const sunSet = document.createElement("p");
   sunSet.classList.add("sunset");
-  sunSet.textContent = `Icon: ${weatherData.sunset}`;
+
+  const sunSetIcon = document.createElement("img");
+  sunSetIcon.classList.add("sunset-icon");
+  sunSetIcon.src = getIconSrc("moon-waxing-crescent");
 
   const highLowContainer = document.createElement("div");
   highLowContainer.classList.add("high-low-container");
 
+  const highLowTitle = document.createElement("p");
+  highLowTitle.classList.add("high-low-title");
+  highLowTitle.textContent = "High and Low Temperatures";
+
   const highTemp = document.createElement("p");
   highTemp.classList.add("high-temp");
-  highTemp.textContent = `High: ${convertTemperature(
-    weatherData.days[0].tempmax
-  ).toFixed(0)}°${currentUnit}`;
+
+  const highTempIcon = document.createElement("img");
+  highTempIcon.classList.add("high-temp-icon");
+  highTempIcon.src = getIconSrc("arrow-up-bold");
 
   const lowTemp = document.createElement("p");
   lowTemp.classList.add("low-temp");
-  lowTemp.textContent = `Low: ${convertTemperature(
-    weatherData.days[0].tempmin
-  ).toFixed(0)}°${currentUnit}`;
 
-  highLowContainer.appendChild(highTemp);
+  const lowTempIcon = document.createElement("img");
+  lowTempIcon.classList.add("low-temp-icon");
+  lowTempIcon.src = getIconSrc("arrow-down-bold");
+
+  lowTemp.append(
+    `${convertTemperature(weatherData.days[0].tempmin).toFixed(
+      0
+    )}°${currentUnit}`
+  );
+  highTemp.append(
+    `${convertTemperature(weatherData.days[0].tempmax).toFixed(
+      0
+    )}°${currentUnit}`
+  );
+
   highLowContainer.appendChild(lowTemp);
+  highLowContainer.appendChild(lowTempIcon);
+  highLowContainer.appendChild(highTemp);
+  highLowContainer.appendChild(highTempIcon);
+  highLowContainer.appendChild(highLowTitle);
 
-  sunContainer.appendChild(sunTitle);
-  sunContainer.appendChild(sunRise);
+  sunSet.append(` ${weatherData.sunset}`);
+  sunRise.append(` ${weatherData.sunrise}`);
+
   sunContainer.appendChild(sunSet);
+  sunContainer.appendChild(sunSetIcon);
+  sunContainer.appendChild(sunRise);
+  sunContainer.appendChild(sunRiseIcon);
+  sunContainer.appendChild(sunTitle);
 
   sunAndHighLowContainer.appendChild(sunContainer);
   sunAndHighLowContainer.appendChild(highLowContainer);
@@ -279,9 +311,20 @@ export function renderWeather(weatherData) {
     dayConditions.classList.add("day-conditions");
     dayConditions.textContent = `${day.conditions}`;
 
+    // const dayPrecip = document.createElement("p");
+    // dayPrecip.classList.add("day-precip");
+    // dayPrecip.textContent = `Precipitation: ${day.precip}%`;
+
     const dayPrecip = document.createElement("p");
     dayPrecip.classList.add("day-precip");
-    dayPrecip.textContent = `Precipitation: ${day.precip}%`;
+
+    const dayPrecipIcon = document.createElement("img");
+    dayPrecipIcon.classList.add("day-precip-icon");
+    dayPrecipIcon.src = getIconSrc("water");
+    dayPrecipIcon.width = 22;
+
+    dayPrecip.appendChild(dayPrecipIcon);
+    dayPrecip.append(`${day.precip}%`);
 
     dayContainer.appendChild(dayOfWeek);
     dayContainer.appendChild(dateOfDay);
