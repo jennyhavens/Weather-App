@@ -144,7 +144,7 @@ export function renderWeather(weatherData) {
 
   const conditionIcon = document.createElement("img");
   conditionIcon.setAttribute("width", "130px");
-  conditionIcon.classList.add("icon");
+  conditionIcon.classList.add("condition-icon", "icon");
   conditionIcon.src = getIconSrc(weatherData.icon);
 
   const conditionInfo = document.createElement("p");
