@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WeatherApp</title>
+    <link rel="stylesheet" href="84bb4fc080631c2605f1.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
+  <script defer src="main.js"></script></head>
+  <body>
+    <div class="main-container">
+      <div class="header-container">
+        <div class="mode-toggle-container">
+          <label class="switch">
+            <input type="checkbox" id="mode-toggle" />
+            <span class="slider"></span>
+          </label>
+          <span id="mode-label"></span>
+        </div>
+      </div>
+      <div class="search-container">
+        <form id="weatherSearch">
+          <input type="search" id="location" placeholder="City, State" />
+          <button
+            title="Use Current Location"
+            id="use-location-btn"
+            type="button"
+          >
+            <img
+              src="37eb6c0928ee07f28f25.svg"
+              alt="Use Current Location"
+            />
+          </button>
+          <button type="submit">Search</button>
+        </form>
+        <div id="validation-message"></div>
+      </div>
+    </div>
+  </body>
+</html>
