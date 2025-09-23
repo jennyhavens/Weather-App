@@ -29,10 +29,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const lastLocation = localStorage.getItem("lastLocation");
   const lastDisplayAddress = localStorage.getItem("lastDisplayAddress");
+  const locationInput = document.getElementById("location");
   if (lastLocation) {
     getWeatherData(lastLocation, lastDisplayAddress);
-    const locationInput = document.getElementById("location");
     if (locationInput) locationInput.value = lastDisplayAddress || lastLocation;
+  } else {
+    const defaultLocation = "Boston, MA";
+    getWeatherData(defaultLocation);
+    if (locationInput) locationInput.value = defaultLocation;
   }
 
   const useLocationBtn = document.getElementById("use-location-btn");
