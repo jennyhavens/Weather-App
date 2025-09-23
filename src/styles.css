@@ -561,10 +561,6 @@ body.night-mode .forecast-container::-webkit-scrollbar-thumb {
     max-width: 98vw;
     margin: 10px auto;
   }
-  .conditions-container {
-    grid-template-columns: 1fr;
-    grid-template-rows: none;
-  }
   .current-temp {
     font-size: 2.2rem;
   }
