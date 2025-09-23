@@ -43,7 +43,7 @@ export function DOMcontrol() {
   const headerContainer = document.querySelector(".header-container");
 
   const headerTitle = document.createElement("header");
-  headerTitle.textContent = "Weather App";
+  headerTitle.innerHTML = 'Weather<span class="weather-app-color">App</span>';
   headerTitle.classList.add("header-title");
 
   const weatherSearch = document.getElementById("weatherSearch");
@@ -137,6 +137,7 @@ export function renderWeather(weatherData) {
 
   const conditionIcon = document.createElement("img");
   conditionIcon.setAttribute("width", "130px");
+  conditionIcon.classList.add("icon");
   conditionIcon.src = getIconSrc(weatherData.icon);
 
   const conditionInfo = document.createElement("p");
@@ -184,14 +185,14 @@ export function renderWeather(weatherData) {
   sunRise.classList.add("sunrise");
 
   const sunRiseIcon = document.createElement("img");
-  sunRiseIcon.classList.add("sunrise-icon");
+  sunRiseIcon.classList.add("sunrise-icon", "icon");
   sunRiseIcon.src = getIconSrc("sunny");
 
   const sunSet = document.createElement("p");
   sunSet.classList.add("sunset");
 
   const sunSetIcon = document.createElement("img");
-  sunSetIcon.classList.add("sunset-icon");
+  sunSetIcon.classList.add("sunset-icon", "icon");
   sunSetIcon.src = getIconSrc("moon-waxing-crescent");
 
   const highLowContainer = document.createElement("div");
@@ -205,14 +206,14 @@ export function renderWeather(weatherData) {
   highTemp.classList.add("high-temp");
 
   const highTempIcon = document.createElement("img");
-  highTempIcon.classList.add("high-temp-icon");
+  highTempIcon.classList.add("high-temp-icon", "icon");
   highTempIcon.src = getIconSrc("arrow-up-bold");
 
   const lowTemp = document.createElement("p");
   lowTemp.classList.add("low-temp");
 
   const lowTempIcon = document.createElement("img");
-  lowTempIcon.classList.add("low-temp-icon");
+  lowTempIcon.classList.add("low-temp-icon", "icon");
   lowTempIcon.src = getIconSrc("arrow-down-bold");
 
   lowTemp.append(
@@ -293,6 +294,7 @@ export function renderWeather(weatherData) {
 
     const dayConditionIcon = document.createElement("img");
     dayConditionIcon.setAttribute("width", "40px");
+    dayConditionIcon.classList.add("icon");
     dayConditionIcon.src = getIconSrc(day.icon);
 
     const dayTempMax = document.createElement("p");
@@ -319,7 +321,7 @@ export function renderWeather(weatherData) {
     dayPrecip.classList.add("day-precip");
 
     const dayPrecipIcon = document.createElement("img");
-    dayPrecipIcon.classList.add("day-precip-icon");
+    dayPrecipIcon.classList.add("day-precip-icon", "icon");
     dayPrecipIcon.src = getIconSrc("water");
     dayPrecipIcon.width = 22;
 

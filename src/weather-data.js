@@ -39,6 +39,26 @@ export function getWeatherData(location) {
         days,
       } = data;
 
+      function isNight(datetime, sunrise, sunset) {
+        if (!datetime || !sunrise || !sunset) return false;
+
+        // Handle both "HH:mm:ss" and "YYYY-MM-DDTHH:mm:ss"
+        let timePart = datetime;
+        if (datetime.includes("T")) {
+          [, timePart] = datetime.split("T");
+        }
+
+        const [curHour, curMin] = timePart.split(":").map(Number);
+        const [sunriseHour, sunriseMin] = sunrise.split(":").map(Number);
+        const [sunsetHour, sunsetMin] = sunset.split(":").map(Number);
+
+        const curMins = curHour * 60 + curMin;
+        const sunriseMins = sunriseHour * 60 + sunriseMin;
+        const sunsetMins = sunsetHour * 60 + sunsetMin;
+
+        return curMins < sunriseMins || curMins > sunsetMins;
+      }
+
       if (
         location &&
         resolvedAddress &&
@@ -163,6 +183,13 @@ export function getWeatherData(location) {
         icon: icon,
         days: deconstructedDays, // array of days with datetime, tempmax, tempmin
       };
+
+      const night = isNight(datetime, sunrise, sunset);
+      document.body.classList.toggle("night-mode", night);
+      if (window.modeToggle && window.modeLabel) {
+        window.modeToggle.checked = night;
+        window.modeLabel.textContent = night ? "Night" : "Day";
+      }
 
       const validationDiv = document.getElementById("validation-message");
       if (validationDiv) validationDiv.textContent = "";

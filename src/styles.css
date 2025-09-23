@@ -2,17 +2,89 @@
   font-family: "Montserrat", sans-serif;
   font-optical-sizing: auto;
   font-style: normal;
+
+  --day-darkest: rgb(4, 27, 118);
+  --day-dark: rgb(10, 50, 210);
+  --day-medium: rgb(37, 127, 244);
+  --day-light: rgb(121, 226, 242);
+  --day-lightest: rgb(171, 240, 233);
+
+  --night-darkest: rgb(2, 10, 45);
+  --night-dark: rgb(5, 23, 98);
+  --night-medium: rgb(4, 53, 117);
+  --night-light: rgb(46, 109, 193);
+  --night-lightest: rgb(126, 137, 181);
 }
 
 html,
 body {
   margin: 0;
   height: 100%;
-  background-color: rgb(84, 154, 214);
+  background: linear-gradient(
+    var(--day-medium),
+    var(--day-light),
+    var(--day-lightest)
+  );
 }
 
 .header-container {
-  background-color: rgb(60, 149, 232);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  background-color: transparent;
+}
+
+.mode-toggle-container {
+  justify-self: start;
+  align-self: center;
+  margin-left: 30px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 55px;
+  height: 28px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(171, 240, 233, 0.56);
+  border-radius: 22px;
+  transition: 0.4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 24px;
+  width: 24px;
+  left: 2px;
+  bottom: 2px;
+  background-color: white;
+  border-radius: 50%;
+  transition: 0.4s;
+}
+
+input:checked + .slider {
+  background-color: var(--night-light);
+}
+
+input:checked + .slider:before {
+  transform: translateX(26px);
 }
 
 .header-title {
@@ -21,16 +93,19 @@ body {
   align-items: center;
   text-align: center;
   font-weight: 900;
-  color: blue;
+  color: var(--day-dark);
   padding: 20px;
   font-size: 3rem;
+}
+
+.weather-app-color {
+  color: rgba(255, 255, 255, 0.855);
 }
 
 .search-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   gap: 10px;
   width: 100%;
   margin-top: 8px;
@@ -49,6 +124,7 @@ body {
   align-items: center;
   justify-content: center;
   width: 100%;
+  gap: 5px;
 }
 
 .search-container input[type="search"] {
@@ -66,7 +142,7 @@ body {
 .search-container button {
   padding: 8px 12px;
   height: 38px;
-  background-color: #007bff;
+  background-color: var(--day-dark);
   color: white;
   border: none;
   border-radius: 11px;
@@ -74,7 +150,7 @@ body {
 }
 
 .search-container button:hover {
-  background-color: #0056b3;
+  background-color: var(--day-darkest);
 }
 
 #validation-message {
@@ -83,7 +159,7 @@ body {
 }
 
 .degrees-container {
-  background-color: rgb(120, 192, 243);
+  background-color: transparent;
   display: flex;
   justify-content: center;
 }
@@ -95,24 +171,24 @@ body {
   margin: 8px;
   font-size: 1rem;
   color: white;
-  background-color: blue;
+  background-color: var(--day-dark);
   cursor: pointer;
 }
 
 .degrees-container button:hover {
-  background-color: darkblue;
+  background-color: var(--day-darkest);
 }
 
 .fahrenheit-button.active-unit,
 .celsius-button.active-unit {
-  background-color: darkblue;
+  background-color: var(--day-darkest);
   color: #fff;
 }
 
 .weather-container {
   display: grid;
   grid-template-rows: auto auto auto;
-  background-color: rgb(63, 199, 214);
+  background-color: rgba(255, 255, 255, 0.386);
   width: 100%;
   max-width: 600px;
   margin: 20px auto;
@@ -120,10 +196,11 @@ body {
   box-sizing: border-box;
   border-radius: 11px;
   min-width: 300px;
+  box-shadow: 2px 2px 5px 2px rgba(0, 0, 0, 0.15);
 }
 
 .current-weather-container {
-  background-color: white;
+  background-color: transparent;
   border-radius: 11px;
 }
 
@@ -188,7 +265,7 @@ body {
   padding: 8px;
   margin: 10px;
   border-radius: 11px;
-  background-color: rgb(187, 229, 218);
+  background-color: rgba(255, 255, 255, 0.386);
   text-align: center;
 }
 
@@ -233,7 +310,7 @@ body {
   display: grid;
   grid-template-columns: 1.3fr 2fr;
   grid-template-rows: repeat(3, 1fr);
-  background-color: pink;
+  background-color: rgba(255, 255, 255, 0.386);
   border-radius: 11px;
   padding: 10px;
 }
@@ -271,7 +348,7 @@ body {
   display: grid;
   grid-template-columns: 1.8fr 2fr;
   grid-template-rows: repeat(3, 1fr);
-  background-color: lightgreen;
+  background-color: rgba(255, 255, 255, 0.386);
   border-radius: 11px;
   padding: 10px;
 }
@@ -338,7 +415,7 @@ body {
   justify-items: center;
   align-items: center;
   text-align: center;
-  background-color: rgb(255, 255, 174);
+  background-color: rgba(37, 127, 244, 0.168);
   padding: 8px 2px;
   grid-row: auto;
   border-radius: 11px;
@@ -382,4 +459,55 @@ body {
   grid-template-columns: 1fr 1fr;
   align-items: center;
   font-size: 0.9rem;
+}
+
+/* Night-Mode */
+
+body.night-mode {
+  background: linear-gradient(
+    var(--night-darkest),
+    var(--night-dark),
+    var(--night-medium)
+  );
+  color: white;
+}
+
+body.night-mode .header-title {
+  color: white;
+}
+
+body.night-mode .weather-app-color {
+  color: var(--night-lightest);
+}
+
+body.night-mode .icon {
+  filter: brightness(0) invert(1);
+}
+
+body.night-mode .search-container button {
+  background-color: var(--night-lightest);
+}
+
+body.night-mode .search-container button:hover {
+  background-color: var(--night-light);
+}
+
+body.night-mode .degrees-container button {
+  background-color: var(--night-lightest);
+}
+
+body.night-mode .degrees-container button:hover {
+  background-color: var(--night-light);
+}
+
+body.night-mode .fahrenheit-button.active-unit {
+  background-color: var(--night-light);
+}
+
+body.night-mode .celsius-button.active-unit {
+  background-color: var(--night-light);
+}
+
+body.night-mode .day-container {
+  background-color: rgba(2, 10, 45, 0.186);
 }
