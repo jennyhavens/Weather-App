@@ -17,7 +17,7 @@ export async function fetchWeatherData(location, includeDays = false) {
   return await response.json();
 }
 
-export function getWeatherData(location) {
+export function getWeatherData(location, displayAddress) {
   fetchWeatherData(location)
     .then((data) => {
       console.log("Fetched Weather Data:", data);
@@ -59,7 +59,10 @@ export function getWeatherData(location) {
         return curMins < sunriseMins || curMins > sunsetMins;
       }
 
+      const isCoordinates = /^-?\d+(\.\d+)?,-?\d+(\.\d+)?$/.test(location);
+
       if (
+        !isCoordinates &&
         location &&
         resolvedAddress &&
         resolvedAddress.toLowerCase() === location.toLowerCase()
@@ -170,7 +173,7 @@ export function getWeatherData(location) {
 
       // Prepare the weather data object to pass to renderWeather
       const weatherData = {
-        location: resolvedAddress,
+        location: displayAddress || resolvedAddress,
         lastUpdated: formatDateTimeFromString(datetime),
         temp: Math.round(temp),
         feelslike: Math.round(feelslike),

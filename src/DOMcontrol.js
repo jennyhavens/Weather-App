@@ -96,6 +96,11 @@ export function renderWeather(weatherData) {
   const weatherContainer = document.querySelector(".weather-container");
   weatherContainer.innerHTML = "";
 
+  const locationInput = document.getElementById("location");
+  if (locationInput) {
+    locationInput.value = weatherData.location;
+  }
+
   //Render current weather
   const currentWeatherContainer = document.createElement("div");
   currentWeatherContainer.classList.add("current-weather-container");
