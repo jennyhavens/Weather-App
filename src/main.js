@@ -1,9 +1,7 @@
 import "./styles.css";
 import { getWeatherData } from "./weather-data";
 import { DOMcontrol } from "./DOMcontrol";
-import { renderWeather } from "./DOMcontrol";
 
-// 1. Add reverse geocoding function
 async function reverseGeocode(lat, lon) {
   const response = await fetch(
     `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lon}&zoom=10`
@@ -29,7 +27,14 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // 2. Update use location button handler
+  const lastLocation = localStorage.getItem("lastLocation");
+  const lastDisplayAddress = localStorage.getItem("lastDisplayAddress");
+  if (lastLocation) {
+    getWeatherData(lastLocation, lastDisplayAddress);
+    const locationInput = document.getElementById("location");
+    if (locationInput) locationInput.value = lastDisplayAddress || lastLocation;
+  }
+
   const useLocationBtn = document.getElementById("use-location-btn");
   if (useLocationBtn) {
     useLocationBtn.addEventListener("click", async () => {
@@ -42,8 +47,10 @@ document.addEventListener("DOMContentLoaded", () => {
             const address = await reverseGeocode(latitude, longitude);
             // Fetch weather using coordinates, but pass the address as a second argument
             getWeatherData(`${latitude},${longitude}`, address);
+            localStorage.setItem("lastLocation", `${latitude},${longitude}`);
+            localStorage.setItem("lastDisplayAddress", address);
           },
-          (error) => {
+          (_error) => {
             alert("Unable to retrieve your location.");
           }
         );
@@ -52,6 +59,6 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   }
-});
 
-DOMcontrol();
+  DOMcontrol();
+});

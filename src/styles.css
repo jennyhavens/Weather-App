@@ -87,6 +87,12 @@ input:checked + .slider:before {
   transform: translateX(26px);
 }
 
+#mode-label {
+  color: var(--day-darkest);
+  font-weight: 500;
+  padding-left: 5px;
+}
+
 .header-title {
   display: flex;
   justify-content: center;
@@ -473,6 +479,9 @@ body.night-mode {
   color: white;
 }
 
+body.night-mode #mode-label {
+  color: white;
+}
 body.night-mode .header-title {
   color: white;
 }

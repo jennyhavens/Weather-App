@@ -59,11 +59,13 @@ export function DOMcontrol() {
 
   const fahrenheitBtn = document.createElement("button");
   fahrenheitBtn.textContent = "F°";
+  fahrenheitBtn.setAttribute("title", "Switch to Fahrenheit");
   fahrenheitBtn.classList.add("fahrenheit-button");
   fahrenheitBtn.classList.add("active-unit");
 
   const celsiusBtn = document.createElement("button");
   celsiusBtn.textContent = "C°";
+  celsiusBtn.setAttribute("title", "Switch to Celsius");
   celsiusBtn.classList.add("celsius-button");
 
   fahrenheitBtn.addEventListener("click", () => {
@@ -190,6 +192,7 @@ export function renderWeather(weatherData) {
   sunRise.classList.add("sunrise");
 
   const sunRiseIcon = document.createElement("img");
+  sunRiseIcon.setAttribute("title", "Sunrise");
   sunRiseIcon.classList.add("sunrise-icon", "icon");
   sunRiseIcon.src = getIconSrc("sunny");
 
@@ -197,6 +200,7 @@ export function renderWeather(weatherData) {
   sunSet.classList.add("sunset");
 
   const sunSetIcon = document.createElement("img");
+  sunSetIcon.setAttribute("title", "Sunset");
   sunSetIcon.classList.add("sunset-icon", "icon");
   sunSetIcon.src = getIconSrc("moon-waxing-crescent");
 
@@ -211,6 +215,7 @@ export function renderWeather(weatherData) {
   highTemp.classList.add("high-temp");
 
   const highTempIcon = document.createElement("img");
+  highTempIcon.setAttribute("title", "High Temperature");
   highTempIcon.classList.add("high-temp-icon", "icon");
   highTempIcon.src = getIconSrc("arrow-up-bold");
 
@@ -218,6 +223,7 @@ export function renderWeather(weatherData) {
   lowTemp.classList.add("low-temp");
 
   const lowTempIcon = document.createElement("img");
+  lowTempIcon.setAttribute("title", "Low Temperature");
   lowTempIcon.classList.add("low-temp-icon", "icon");
   lowTempIcon.src = getIconSrc("arrow-down-bold");
 
@@ -318,14 +324,11 @@ export function renderWeather(weatherData) {
     dayConditions.classList.add("day-conditions");
     dayConditions.textContent = `${day.conditions}`;
 
-    // const dayPrecip = document.createElement("p");
-    // dayPrecip.classList.add("day-precip");
-    // dayPrecip.textContent = `Precipitation: ${day.precip}%`;
-
     const dayPrecip = document.createElement("p");
     dayPrecip.classList.add("day-precip");
 
     const dayPrecipIcon = document.createElement("img");
+    dayPrecipIcon.setAttribute("title", "Chance of Precipitation");
     dayPrecipIcon.classList.add("day-precip-icon", "icon");
     dayPrecipIcon.src = getIconSrc("water");
     dayPrecipIcon.width = 22;

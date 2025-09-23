@@ -184,7 +184,7 @@ export function getWeatherData(location, displayAddress) {
         sunrise: formattedTime(sunrise),
         sunset: formattedTime(sunset),
         icon: icon,
-        days: deconstructedDays, // array of days with datetime, tempmax, tempmin
+        days: deconstructedDays,
       };
 
       const night = isNight(datetime, sunrise, sunset);
@@ -197,12 +197,15 @@ export function getWeatherData(location, displayAddress) {
       const validationDiv = document.getElementById("validation-message");
       if (validationDiv) validationDiv.textContent = "";
 
-      // Call renderWeather to display the data
+      localStorage.setItem("lastLocation", location);
+      localStorage.setItem(
+        "lastDisplayAddress",
+        displayAddress || resolvedAddress
+      );
+
       renderWeather(weatherData);
     })
     .catch((err) => {
       console.error(err);
     });
 }
-
-getWeatherData("Boston, MA");
